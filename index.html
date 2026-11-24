@@ -243,7 +243,7 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none;width:0;height:0}
 
 
 /* v9 mobile navigation: compact fixed header + slide-in side navigation */
-.mobile-menu{display:none;align-items:center;justify-content:center;width:40px;height:40px;min-width:40px;padding:0;border-radius:11px;background:#eef3ff;color:#244fd7;font-size:17px}
+.mobile-menu{display:none!important;align-items:center;justify-content:center;width:40px;height:40px;min-width:40px;padding:0;border-radius:11px;background:#eef3ff;color:#244fd7;font-size:17px}
 .mobile-nav-backdrop{display:none}
 @media(max-width:650px){
   .app{height:100vh;height:100dvh;min-height:0;overflow:hidden;display:flex;flex-direction:column}
@@ -274,6 +274,8 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none;width:0;height:0}
   #roleBadge{display:none}
 }
 
+/* Hamburger is reserved for mobile / compact devices only */
+@media(min-width:651px){.mobile-menu{display:none!important}}
 </style>
 </head>
 <body>

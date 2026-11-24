@@ -61,18 +61,6 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none;width:0;height:0}
 .portal-footer{flex:0 0 auto;text-align:center;padding:9px 14px;font-size:11px;color:var(--muted);background:var(--card);border-top:1px solid var(--line)}
 
 
-/* Mobile navigation without a hamburger: keep navigation visible in a horizontal strip */
-@media(max-width:650px){
-  .mobile-menu{display:none!important}
-  .layout{display:flex;flex-direction:column;min-height:0;height:calc(100dvh - 66px - 40px);overflow:hidden}
-  .sidebar,.sidebar.open{display:block!important;width:100%;flex:0 0 auto;padding:5px 8px;border-right:0;border-bottom:1px solid var(--line);overflow-x:auto;overflow-y:hidden;white-space:nowrap}
-  .sidebar .nav-label{display:none}
-  #navItems{display:flex;gap:5px;min-width:max-content}
-  .nav-btn{width:auto;display:inline-flex;white-space:nowrap;padding:9px 11px;margin:0;font-size:12px}
-  .main{width:100%;flex:1;min-height:0;overflow-y:auto;padding:14px}
-}
-
- 
 .icon-btn{display:inline-flex;align-items:center;justify-content:center;margin-left:6px;width:27px;height:27px;border:1px solid var(--line);border-radius:7px;background:#fff;color:var(--blue);vertical-align:middle}.icon-btn:hover{background:#eff6ff}.candidate-profile-modal{width:min(760px,100%)}
 /* Social-style profile and colourful completion wizard */
 .profile-progress{padding:20px;background:linear-gradient(135deg,#fff 0%,#f5f8ff 55%,#fff7ed 100%)}
@@ -253,6 +241,39 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none;width:0;height:0}
 .table-footer .pagination{width:100%;justify-content:flex-end}
 @media(max-width:600px){.public-jobs-toolbar{flex-direction:column;align-items:stretch}.pagination{justify-content:center}}
 
+
+/* v9 mobile navigation: compact fixed header + slide-in side navigation */
+.mobile-menu{display:none;align-items:center;justify-content:center;width:40px;height:40px;min-width:40px;padding:0;border-radius:11px;background:#eef3ff;color:#244fd7;font-size:17px}
+.mobile-nav-backdrop{display:none}
+@media(max-width:650px){
+  .app{height:100vh;height:100dvh;min-height:0;overflow:hidden;display:flex;flex-direction:column}
+  .topbar{position:relative;top:auto;z-index:25;flex:0 0 62px;height:62px;min-height:62px;padding:0 11px;gap:8px;box-shadow:0 2px 12px rgba(15,23,42,.07)}
+  .top-left{gap:9px;min-width:0}
+  .mobile-menu{display:inline-flex!important;flex:0 0 40px}
+  .logo-mark{width:33px;height:33px;flex:0 0 33px}
+  .top-title{font-size:12px;white-space:nowrap;letter-spacing:.3px}
+  .topbar .brand-sub{font-size:10px;margin-top:2px;white-space:nowrap}
+  .top-right{gap:6px;margin-left:auto}
+  #roleBadge{font-size:9px;padding:5px 7px;white-space:nowrap}
+  #logoutBtn{width:38px;height:38px;padding:0;min-width:38px;font-size:0;display:inline-flex;align-items:center;justify-content:center}
+  #logoutBtn i{font-size:15px;margin:0}
+  .layout{display:flex;flex:1 1 auto;flex-direction:row;min-height:0;height:auto;overflow:hidden;position:relative}
+  .sidebar,.sidebar.open{position:fixed;display:none!important;top:62px;left:0;bottom:0;width:min(82vw,310px);max-height:calc(100dvh - 62px);overflow-y:auto;overflow-x:hidden;white-space:normal;padding:18px 13px 26px;background:#fff;border:0;border-right:1px solid var(--line);box-shadow:12px 0 32px rgba(15,23,42,.13);z-index:31}
+  .sidebar.open{display:block!important}
+  .sidebar .nav-label{display:block;padding:9px 12px 12px}
+  #navItems{display:flex;flex-direction:column;gap:4px;min-width:0}
+  .nav-btn{width:100%;display:flex;white-space:normal;text-align:left;padding:13px 14px;margin:0;font-size:13px}
+  .mobile-nav-backdrop:not(.hidden){display:block;position:fixed;inset:62px 0 0;background:rgba(15,23,42,.38);z-index:30}
+  .main{width:100%;flex:1 1 auto;min-width:0;min-height:0;overflow-y:auto;overflow-x:hidden;padding:14px 12px 22px;-webkit-overflow-scrolling:touch}
+  .portal-footer{flex:0 0 auto;padding:7px 8px;font-size:9px;line-height:1.3}
+}
+@media(max-width:380px){
+  .topbar{padding:0 8px}
+  .top-left{gap:7px}
+  .top-title{font-size:11px}
+  #roleBadge{display:none}
+}
+
 </style>
 </head>
 <body>
@@ -280,7 +301,8 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none;width:0;height:0}
  </div>
 </div>
 <div id="appView" class="app hidden">
- <header class="topbar"><div class="top-left"><div class="logo-mark"><i class="fa-solid fa-briefcase"></i></div><div><div class="top-title">Talent Portal</div><div class="brand-sub">Candidate & Bench Sales Portal</div></div></div><div class="top-right"><span id="roleBadge" class="badge-role"></span><span id="userName" class="user-chip"></span><button class="btn ghost" id="logoutBtn"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</button></div></header>
+ <header class="topbar"><div class="top-left"><button type="button" id="mobileMenuBtn" class="btn ghost mobile-menu" aria-label="Open navigation" aria-expanded="false"><i class="fa-solid fa-bars"></i></button><div class="logo-mark"><i class="fa-solid fa-briefcase"></i></div><div><div class="top-title">Talent Portal</div><div class="brand-sub">Candidate & Bench Sales Portal</div></div></div><div class="top-right"><span id="roleBadge" class="badge-role"></span><span id="userName" class="user-chip"></span><button class="btn ghost" id="logoutBtn"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</button></div></header>
+ <div id="mobileNavBackdrop" class="mobile-nav-backdrop hidden"></div>
  <div class="layout"><aside id="sidebar" class="sidebar"><div class="nav-label">WORKSPACE</div><div id="navItems"></div></aside><main id="mainContent" class="main"></main></div><footer class="portal-footer">Made with <span aria-label="love">❤️</span> by Nandan to help Bench Sales and Recruiters in the USA job market.</footer>
 </div>
 <div id="modalRoot"></div><div id="toast" class="toast hidden"></div>
@@ -338,7 +360,7 @@ function resourcesForRole(){return state.user.role==="Admin"?["users","candidate
 function openApp(){$("#authView").classList.add("hidden");$("#appView").classList.remove("hidden");$("#userName").textContent=state.user.name;$("#roleBadge").textContent=state.user.role;renderNav();restoreLocalCache();renderDashboardCached();refreshDashboard();preloadWorkspace();if(state.user.role==="Candidate")setTimeout(maybePromptEmployer,450)}
 async function maybePromptEmployer(){try{const r=await api("list",{resource:"profile"});const p=r.profile||{};if(p.hasEmployer==="Yes"||p.employerPromptCompleted===true||String(p.employerPromptCompleted).toUpperCase()==="TRUE")return;showEmployerPrompt(p)}catch(e){console.warn("Employer prompt check failed",e.message)}}
 function showEmployerPrompt(profile={}){const employerFields=`<div class="employer-details-grid hidden" id="firstLoginEmployerFields"><div class="field"><label>Employer contact name *</label><input name="employerContactName" maxlength="150" placeholder="Employer contact name"></div><div class="field"><label>Employer email *</label><input name="employerEmail" type="email" placeholder="employer@company.com"></div><div class="field"><label>Employer phone *</label><input name="employerPhone" maxlength="30" placeholder="Employer phone"></div><div class="field"><label>Employer company *</label><input name="employerCompany" maxlength="200" placeholder="Company name"></div></div>`;$("#modalRoot").innerHTML=`<div class="modal-backdrop" id="employerPromptBackdrop"><div class="modal"><div class="modal-head"><h2>Do you have an employer?</h2></div><p class="muted small">Help keep your candidate profile up to date. You can also update this later in My Profile.</p><form id="firstLoginEmployerForm"><div class="field"><label>Do you currently have an employer? *</label><select name="hasEmployer" id="firstLoginHasEmployer" required><option value="">Please select</option><option value="Yes">Yes</option><option value="No">No</option></select></div>${employerFields}<div class="modal-foot"><button class="btn" type="submit">Save and continue</button></div></form></div></div>`;const sel=$("#firstLoginHasEmployer"),wrap=$("#firstLoginEmployerFields");sel.onchange=()=>toggleEmployerFields(sel,wrap);$("#firstLoginEmployerForm").onsubmit=async e=>{e.preventDefault();const d=formObj(e.target);if(d.hasEmployer==="Yes"&&(!d.employerContactName||!d.employerEmail||!d.employerPhone||!d.employerCompany)){toast("Please complete all four employer details.",true);return}const b=e.target.querySelector('button[type="submit"]');b.disabled=true;try{await api("updateEmployer",d);$("#modalRoot").innerHTML="";toast("Employer details saved.")}catch(err){toast(err.message,true);b.disabled=false}}}
-function renderNav(){$("#navItems").innerHTML=navConfig().map(([id,ic,label])=>`<button class="nav-btn ${state.page===id?"active":""}" data-page="${id}"><span class="nav-icon"><i class="${ic}"></i></span>${label}</button>`).join("");document.querySelectorAll("[data-page]").forEach(b=>b.onclick=()=>{$("#sidebar").classList.remove("open");loadPage(b.dataset.page)})}
+function renderNav(){$("#navItems").innerHTML=navConfig().map(([id,ic,label])=>`<button class="nav-btn ${state.page===id?"active":""}" data-page="${id}"><span class="nav-icon"><i class="${ic}"></i></span>${label}</button>`).join("");document.querySelectorAll("[data-page]").forEach(b=>b.onclick=()=>{closeMobileNav();loadPage(b.dataset.page)})}
 async function preloadWorkspace(){const names=resourcesForRole();await Promise.all(names.map(async page=>{try{const r=await api("list",{resource:page,offset:0,limit:PAGE_SIZE});if(page==="dashboard"){state.dashboardSummary=r.summary||{};saveLocalCache();if(state.page==="dashboard")renderPage("dashboard",{summary:state.dashboardSummary}) ;return}state.cache[page]=mergeRecords(state.cache[page],r.items||[]);state.offsets[page]=state.cache[page].length;state.hasMore[page]=!!r.hasMore;saveLocalCache();if(state.page===page)renderPage(page,{...r,items:state.cache[page]})}catch(e){console.warn("Preload failed for",page,e.message)}}));}
 function renderDashboardCached(){renderPage("dashboard",{summary:state.dashboardSummary||{}})}
 async function refreshDashboard(){if(!state.token||!state.user)return;try{const r=await api("list",{resource:"dashboard"});state.dashboardSummary=r.summary||{};saveLocalCache();if(state.page==="dashboard")renderPage("dashboard",{summary:state.dashboardSummary})}catch(e){console.warn("Dashboard refresh failed",e.message)}}
@@ -437,6 +459,22 @@ async function openPublicJobs(){
 }
 function showPublicJobDetails(id){const j=(window.publicJobsCache||[]).find(x=>String(x.id)===String(id));if(!j)return;renderJobDetailsModal(j,true)}
 function guestApply(jobId){state.pendingPublicJob=jobId;closeModal();showAuth("login");toast("Please sign in or create an account to apply.")}
+function closeMobileNav(){
+ const side=$("#sidebar"),back=$("#mobileNavBackdrop"),btn=$("#mobileMenuBtn");
+ if(side)side.classList.remove("open");
+ if(back)back.classList.add("hidden");
+ if(btn){btn.setAttribute("aria-expanded","false");btn.setAttribute("aria-label","Open navigation");btn.innerHTML='<i class="fa-solid fa-bars"></i>'}
+}
+function toggleMobileNav(){
+ const side=$("#sidebar"),back=$("#mobileNavBackdrop"),btn=$("#mobileMenuBtn");
+ if(!side||!back||!btn)return;
+ const opening=!side.classList.contains("open");
+ if(opening){side.classList.add("open");back.classList.remove("hidden");btn.setAttribute("aria-expanded","true");btn.setAttribute("aria-label","Close navigation");btn.innerHTML='<i class="fa-solid fa-xmark"></i>'}
+ else closeMobileNav();
+}
+$("#mobileMenuBtn")?.addEventListener("click",toggleMobileNav);
+$("#mobileNavBackdrop")?.addEventListener("click",closeMobileNav);
+window.addEventListener("resize",()=>{if(window.innerWidth>650)closeMobileNav()});
 async function restoreSession(){if(!state.token||!state.user){sessionStorage.removeItem("steneral_portal_token");sessionStorage.removeItem("steneral_portal_user");return}try{await api("list",{resource:"dashboard"});openApp()}catch(e){sessionStorage.removeItem("steneral_portal_token");sessionStorage.removeItem("steneral_portal_user");state.token=null;state.user=null;clearPortalCache();showAuth("login")}}
 if(state.token&&state.user){$("#authView").classList.add("hidden");$("#appView").classList.remove("hidden");$("#mainContent").innerHTML='<div class="panel empty"><i class="fa-solid fa-circle-notch fa-spin"></i> Restoring your session…</div>';restoreSession()}
 setInterval(()=>{if(state.token&&!document.hidden)refreshDashboard()},180000);
